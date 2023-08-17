@@ -1,0 +1,2 @@
+# WHEECon-for-WHEE-ARHackathon
+これはM5StackCore2向けのファームウェアです。このファームウェアを使用すれば、プログラミング不要で、STYLYにより制作されたXRコンテンツ内でセンサ情報を利用できます。
