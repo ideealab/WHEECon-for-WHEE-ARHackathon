@@ -14,9 +14,9 @@ https://drive.google.com/file/d/1lwQie3a9wRp5ZBRF1kbOUnKDnULMeuMI/view?usp=shari
 
      https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
 
-   - 「ツール」→「ボード…」→「ボードマネージャ…」と選択します
+ 　 - 「ツール」→「ボード…」→「ボードマネージャ…」と選択します
 
-   - ボードマネージャが開いたら「m5stack」と入力すると、下のウィンドウに「M5Stack」という名前のものが出るので、「インストール」をクリックします。
+ 　 - ボードマネージャが開いたら「m5stack」と入力すると、下のウィンドウに「M5Stack」という名前のものが出るので、「インストール」をクリックします。
 
 
 - 下記のライブラリのインストールが必要
