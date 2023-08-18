@@ -8,9 +8,9 @@ https://drive.google.com/file/d/1lwQie3a9wRp5ZBRF1kbOUnKDnULMeuMI/view?usp=shari
 
 - M5StackCore2のボード追加
 
- 1. 「Arduino(macOS) / ファイル(windows)」→「環境設定」をクリックして環境設定の画面を開きます。
+ 　1. 「Arduino(macOS) / ファイル(windows)」→「環境設定」をクリックして環境設定の画面を開きます。
 
- 2. 「追加のボードマネージャーのURL」で下記のURLを追加します。
+ 　2. 「追加のボードマネージャーのURL」で下記のURLを追加します。
 
    https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
 
