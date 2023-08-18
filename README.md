@@ -4,7 +4,7 @@
 ファームウェアの利用方法は下記のURLにご参考ください。
 https://drive.google.com/file/d/1lwQie3a9wRp5ZBRF1kbOUnKDnULMeuMI/view?usp=sharing
 
-【Arduino　IDEの利用】
+【Arduino　IDEでの利用】
 
 - M5StackCore2のボード追加
 
