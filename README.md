@@ -19,7 +19,7 @@ https://drive.google.com/file/d/1lwQie3a9wRp5ZBRF1kbOUnKDnULMeuMI/view?usp=shari
  　 - ボードマネージャが開いたら「m5stack」と入力すると、下のウィンドウに「M5Stack」という名前のものが出るので、「インストール」をクリックします。
 
 
-- 下記のライブラリのインストールが必要
+- 下記のライブラリのインストール
 
  　- M5Core2　Library by M5Stack
 
