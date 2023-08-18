@@ -21,8 +21,8 @@ https://drive.google.com/file/d/1lwQie3a9wRp5ZBRF1kbOUnKDnULMeuMI/view?usp=shari
 
 - 下記のライブラリのインストールが必要
 
- - M5Core2　Library by M5Stack
+ 　- M5Core2　Library by M5Stack
 
- - ESP32 BLE Keyboard library by T-vK
+ 　- ESP32 BLE Keyboard library by T-vK
 
- - VL53L0X library for Arduino
+ 　- VL53L0X library for Arduino
