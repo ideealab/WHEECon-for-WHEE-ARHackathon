@@ -5,23 +5,24 @@
 https://drive.google.com/file/d/1lwQie3a9wRp5ZBRF1kbOUnKDnULMeuMI/view?usp=sharing
 
 【Arduino　IDEの利用】
-M5StackCore2のボード追加
 
-・　 「Arduino(macOS) / ファイル(windows)」→「環境設定」をクリックして環境設定の画面を開きます。
+- M5StackCore2のボード追加
 
-・ 「追加のボードマネージャーのURL」で下記のURLを追加します。
+ ・　 「Arduino(macOS) / ファイル(windows)」→「環境設定」をクリックして環境設定の画面を開きます。
 
-  https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+ ・ 「追加のボードマネージャーのURL」で下記のURLを追加します。
 
-・ 「ツール」→「ボード…」→「ボードマネージャ…」と選択します
+   https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
 
-・ ボードマネージャが開いたら「m5stack」と入力すると、下のウィンドウに「M5Stack」という名前のものが出るので、「インストール」をクリックします。
+ ・ 「ツール」→「ボード…」→「ボードマネージャ…」と選択します
+
+ ・ ボードマネージャが開いたら「m5stack」と入力すると、下のウィンドウに「M5Stack」という名前のものが出るので、「インストール」をクリックします。
 
 
-下記のライブラリのインストールが必要
+- 下記のライブラリのインストールが必要
 
-・ M5Core2　Library by M5Stack
+ ・ M5Core2　Library by M5Stack
 
-・ ESP32 BLE Keyboard library by T-vK
+ ・ ESP32 BLE Keyboard library by T-vK
 
-・ VL53L0X library for Arduino
+ ・ VL53L0X library for Arduino
