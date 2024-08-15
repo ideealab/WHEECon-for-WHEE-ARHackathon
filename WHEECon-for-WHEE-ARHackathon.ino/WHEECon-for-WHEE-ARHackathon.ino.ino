@@ -65,47 +65,51 @@ char buttonsStatus1[30];
 char buttonsStatus2[30];
 
 // Protocol related constants
-const byte KEYS_FOR_ANALOG_CH[] = {'`', '1', '2', '3', '4', '5',
-                                   '6', '7', '8', '9', '0'
-                                  };
-const byte KEYS_FOR_BUTTON_CH[] = {'v', 'b'};
+const byte KEYS_FOR_ANALOG_CH[] = { '`', '1', '2', '3', '4', '5',
+                                    '6', '7', '8', '9', '0' };
+const byte KEYS_FOR_BUTTON_CH[] = { 'v', 'b' };
 
 //gyro,
 //x['m', 'n', ',', 'o', 'p'], y['u', 'i', 'h', 'j', 'k'], z['f', 'g', 'r', 't', 'y']
 //accel
 //x['d', 'x', 'z', 'c', '['], y['q', 'w', 'e', 'a', 's'], z['x', '-', '=', '.', '/']
 
-const byte KEYS_FOR_IMU_CH[] = {'m', 'n', ',', 'o', 'p', //gyro x
-                                'u', 'i', 'h', 'j', 'k', //gyro y
-                                'f', 'g', 'r', 't', 'y', //gyro z
-                                'd', 'x', 'z', 'c', '[', //accel x
-                                'q', 'w', 'e', 'a', 's', //accel y
-                                'l', '-', '=', '.', '/'  //accel z
-                               };
+const byte KEYS_FOR_IMU_CH[] = {
+  'm', 'n', ',', 'o', 'p',  //gyro x
+  'u', 'i', 'h', 'j', 'k',  //gyro y
+  'f', 'g', 'r', 't', 'y',  //gyro z
+  'd', 'x', 'z', 'c', '[',  //accel x
+  'q', 'w', 'e', 'a', 's',  //accel y
+  'l', '-', '=', '.', '/'   //accel z
+};
 
 
 // ESP32 BLE Keyboard related variables
 // Note: the device name should be within 15 characters;
 // otherwise, macOS and iOS devices can't discover
 // https://github.com/T-vK/ESP32-BLE-Keyboard/issues/51#issuecomment-733886764
-BleKeyboard bleKeyboard("alt. controller");
+#define BLEKEYBOARD_NAME "IDEEA_LAB"
+
+BleKeyboard bleKeyboard(BLEKEYBOARD_NAME);
 bool isConnected = false;
 bool isSending = false;
 
 
 int BtnB_count = 0;
 
+String bleKeyboard_Name = BLEKEYBOARD_NAME;
+
 
 void setup() {
   // A workaround to avoid noise regarding Button A
-  adc_power_acquire();
+  // adc_power_acquire();
 
   M5.begin();
   M5.Lcd.fillScreen(WHITE);
   M5.Lcd.setTextColor(BLUE, WHITE);
   M5.Lcd.setTextSize(2);
 
-  preferences.begin("alt. controller", false);
+  preferences.begin(BLEKEYBOARD_NAME, false);
   unitOnPortB = preferences.getInt("unitOnPortB", UNIT_NONE);
   distRangeMin = preferences.getInt("distRangeMin", DIST_RANGE_MIN);
   distRangeMax = preferences.getInt("distRangeMax", DIST_RANGE_MAX);
@@ -133,7 +137,9 @@ void setup() {
   bleKeyboard.begin();
 
   M5.Lcd.setCursor(0, 0);
-  M5.Lcd.print("Bluetooth: Not connected");
+  //  M5.Lcd.print("Bluetooth: Not connected");
+  M5.Lcd.print(bleKeyboard_Name);
+  M5.Lcd.print(": Not connected");
 
   drawButtons(currentScreenMode);
   Serial.begin(9600);
@@ -147,6 +153,7 @@ void loop() {
   handleButtons();
 
   isConnected = bleKeyboard.isConnected();
+
   bool requestToSend = isConnected && isSending;
 
   if (isDualButtonConnected) {
@@ -431,9 +438,8 @@ void handleButtons() {
     switch (currentScreenMode) {
 
       case SCREEN_MAIN:
-        BtnB_count ++;
-        if (BtnB_count == 1)
-        {
+        BtnB_count++;
+        if (BtnB_count == 1) {
           isIMUSensorConnected = true;
         } else {
           isIMUSensorConnected = false;
@@ -479,7 +485,11 @@ void updateFlagsRegardingPortB() {
 
 void drawMainScreen() {
   M5.Lcd.setCursor(0, 0);
-  M5.Lcd.printf("Bluetooth: %s",
+  //  M5.Lcd.printf("Bluetooth: %s",
+  //                isConnected ? "Connected    " : "Disconnected ");
+
+  M5.Lcd.print(bleKeyboard_Name);
+  M5.Lcd.printf(": %s",
                 isConnected ? "Connected    " : "Disconnected ");
   //imu
   M5.Lcd.setCursor(0, LAYOUT_GYROZ_CH_TOP);
@@ -497,7 +507,6 @@ void drawMainScreen() {
     M5.Lcd.setCursor(0, LAYOUT_BUTTONS_CH_TOP + LAYOUT_LINE_HEIGHT * 2);
     M5.Lcd.print(buttonsStatus2);
   }
-
 }
 
 void drawPreferencesScreen() {
@@ -567,8 +576,7 @@ void handleRangingSensor(bool updateRequested) {
   int range = constrain(rangingSensor.readRangeSingleMillimeters(),
                         distRangeMin, distRangeMax);
 
-  if (rangingSensor.readRangeSingleMillimeters() == 8191)
-  {
+  if (rangingSensor.readRangeSingleMillimeters() == 8191) {
     range = distRangeMax;
   }
   // convert to 11 steps
@@ -586,7 +594,6 @@ void handleRangingSensor(bool updateRequested) {
     }
     lastValue = currentValue;
   }
-
 }
 
 
@@ -612,27 +619,27 @@ void handleIMUSensor(bool updateRequested) {
 
 
   // convert to 5 steps
-  int currentValue_gyroX = map(gyroX_data, gyroRangeMin, gyroRangeMax, -2, 2);
-  int currentValue_gyroY = map(gyroY_data, gyroRangeMin, gyroRangeMax, -2, 2);
-  int currentValue_gyroZ = map(gyroZ_data, gyroRangeMin, gyroRangeMax, -2, 2);
+  int currentValue_gyroX = int(round(preciseMap(gyroX_data, gyroRangeMin, gyroRangeMax, -2, 2)));
+  int currentValue_gyroY = int(round(preciseMap(gyroY_data, gyroRangeMin, gyroRangeMax, -2, 2)));
+  int currentValue_gyroZ = int(round(preciseMap(gyroZ_data, gyroRangeMin, gyroRangeMax, -2, 2)));
 
-  int currentValue_accX = map(accX_data, accRangeMin, accRangeMax, -2, 2);
-  int currentValue_accY = map(accY_data, accRangeMin, accRangeMax, -2, 2);
-  int currentValue_accZ = map(accZ_data, accRangeMin, accRangeMax, -2, 2);
+  int currentValue_accX = int(round(preciseMap(accX_data, accRangeMin, accRangeMax, -2, 2)));
+  int currentValue_accY = int(round(preciseMap(accY_data, accRangeMin, accRangeMax, -2, 2)));
+  int currentValue_accZ = int(round(preciseMap(accZ_data, accRangeMin, accRangeMax, -2, 2)));
 
 
   sprintf(imuStatus, "GryoX:%2d (%4d o/s)\nGryoY:%2d (%4d o/s)\nGryoZ:%2d (%4d o/s)\nAccX:%2d (%4d G/10)\nAccY:%2d (%4d G/10)\nAccZ:%2d (%4d G/10)", currentValue_gyroX, gyroX_data, currentValue_gyroY, gyroY_data, currentValue_gyroZ, gyroZ_data, currentValue_accX, accX_data, currentValue_accY, accY_data, currentValue_accZ, accZ_data);
 
   if (lastValue_gyroX != currentValue_gyroX) {
     if (updateRequested) {
-      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_gyroX + 2]);//+2: [-2,2] -> [0,4] move cursor to gyroX
+      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_gyroX + 2]);  //+2: [-2,2] -> [0,4] move cursor to gyroX
     }
     lastValue_gyroX = currentValue_gyroX;
   }
 
   if (lastValue_gyroY != currentValue_gyroY) {
     if (updateRequested) {
-      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_gyroY + 2 + 5]);//+2: [-2,2] -> [0,4], +5: move cursor to gyroY
+      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_gyroY + 2 + 5]);  //+2: [-2,2] -> [0,4], +5: move cursor to gyroY
     }
     lastValue_gyroY = currentValue_gyroY;
   }
@@ -640,7 +647,7 @@ void handleIMUSensor(bool updateRequested) {
 
   if (lastValue_gyroZ != currentValue_gyroZ) {
     if (updateRequested) {
-      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_gyroZ + 2 + 10]);//+2: [-2,2] -> [0,4], +10: move cursor to gyroZ
+      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_gyroZ + 2 + 10]);  //+2: [-2,2] -> [0,4], +10: move cursor to gyroZ
     }
     lastValue_gyroZ = currentValue_gyroZ;
   }
@@ -648,14 +655,14 @@ void handleIMUSensor(bool updateRequested) {
 
   if (lastValue_accX != currentValue_accX) {
     if (updateRequested) {
-      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_accX + 2 + 15]); //+2: [-2,2] -> [0,4], +15: move cursor to accX
+      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_accX + 2 + 15]);  //+2: [-2,2] -> [0,4], +15: move cursor to accX
     }
     lastValue_accX = currentValue_accX;
   }
 
   if (lastValue_accY != currentValue_accY) {
     if (updateRequested) {
-      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_accY + 2 + 20]);//+2: [-2,2] -> [0,4], +20: move cursor to gyroY
+      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_accY + 2 + 20]);  //+2: [-2,2] -> [0,4], +20: move cursor to gyroY
     }
     lastValue_accY = currentValue_accY;
   }
@@ -663,11 +670,10 @@ void handleIMUSensor(bool updateRequested) {
 
   if (lastValue_accZ != currentValue_accZ) {
     if (updateRequested) {
-      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_accZ + 2 + 25]);//+2: [-2,2] -> [0,4], +10: move cursor to gyroZ
+      bleKeyboard.write(KEYS_FOR_IMU_CH[currentValue_accZ + 2 + 25]);  //+2: [-2,2] -> [0,4], +10: move cursor to gyroZ
     }
     lastValue_accZ = currentValue_accZ;
   }
-
 }
 
 void drawButtons(int currentScreenMode) {
@@ -692,7 +698,8 @@ void drawButtons(int currentScreenMode) {
           drawButton(LAYOUT_BTN_B_CENTER, "IMUON");
         } else {
           drawButton(LAYOUT_BTN_B_CENTER, "IMU");
-        }        drawButton(LAYOUT_BTN_C_CENTER, "Stop");
+        }
+        drawButton(LAYOUT_BTN_C_CENTER, "Stop");
       }
       break;
     case SCREEN_PREFS_SELECT:
@@ -726,4 +733,9 @@ void drawButton(int centerX, const String &title) {
   M5.Lcd.fillRect(rectLeft, rectTop, rectWidth, rectHeight, TFT_WHITE);
   M5.Lcd.drawRect(rectLeft, rectTop, rectWidth, rectHeight, TFT_BLUE);
   M5.Lcd.drawCentreString(title, centerX, coordinateY, 1);
+}
+
+//map 関数
+float preciseMap(float x, float in_min, float in_max, float out_min, float out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
